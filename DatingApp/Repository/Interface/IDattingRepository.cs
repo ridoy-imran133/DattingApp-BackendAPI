@@ -1,4 +1,5 @@
-﻿using DatingApp.Models;
+﻿using DatingApp.DTOS;
+using DatingApp.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,7 @@ namespace DatingApp.Repository.Interface
         void Delete<T>(T entity) where T : class;
 
         Task<bool> SaveAll();
+        public bool SaveEditProfileData(UserForUpdateDTO userForUpdate);
         Task<IEnumerable<User>> GetUsers();
         Task<User> GetUser(string pUserId);
     }

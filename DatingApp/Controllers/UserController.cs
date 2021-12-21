@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Authorization;
 using DatingApp.Repository.Interface;
 using AutoMapper;
 using DatingApp.DTOS;
+using System.Security.Claims;
+using DatingApp.Models;
 
 namespace DatingApp.Controllers
 {
@@ -45,6 +47,26 @@ namespace DatingApp.Controllers
             var userRet = _IMapper.Map<UserDetailsDTO>(user);
 
             return Ok(userRet);
+        }
+
+        [HttpPost]
+        [Route("updateUser")]
+        public async Task<IActionResult> UpdateUser(UserForUpdateDTO userForUpdate)
+        {
+            bool val = _IDattingRepository.SaveEditProfileData(userForUpdate);
+            //if(id != User.FindFirst(ClaimTypes.NameIdentifier).Value)
+            //{
+            //    return Unauthorized();
+            //}
+
+            //var userFromRepo = await _IDattingRepository.GetUser(id);
+            //_IMapper.Map(userForUpdate, userFromRepo);
+            //if (await _IDattingRepository.SaveAll())
+            //    return NoContent();
+
+            //throw new Exception($"Updating user {id} failed on save");
+
+            return Ok(val);
         }
     }
 }

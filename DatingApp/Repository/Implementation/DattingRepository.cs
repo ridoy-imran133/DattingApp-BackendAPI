@@ -1,4 +1,5 @@
-﻿using DatingApp.Models;
+﻿using DatingApp.DTOS;
+using DatingApp.Models;
 using DatingApp.Repository.Interface;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -57,6 +58,23 @@ namespace DatingApp.Repository.Implementation
         public Task<bool> SaveAll()
         {
             throw new NotImplementedException();
+        }
+
+        public bool SaveEditProfileData(UserForUpdateDTO userForUpdate)
+        {
+            using (var _context = new DattingAppDbContext())
+            {
+                var user = _context.User.FirstOrDefault(x => x.Id == userForUpdate.Id);
+                user.Introduction = userForUpdate.Introduction;
+                user.LookingFor = userForUpdate.LookingFor;
+                user.Interests = userForUpdate.Interests;
+                user.City = userForUpdate.City;
+                user.Country = userForUpdate.Country;
+
+                _context.User.Update(user);
+                _context.SaveChanges();
+                return true;
+            }
         }
     }
 }
