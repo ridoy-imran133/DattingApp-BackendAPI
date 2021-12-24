@@ -1,11 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "rzb+L2Snck1bOeT6QM1Tnz+SeVJ25Yy8KtSQObGSIPPlG9kysF+oE0F8PJXJW6cVXtMA5Sey601kl1mrivgrMQ==",
+  "dgSpecHash": "I3ZwDFcQ62rCr2zTkC2i21TDqGHEPQko2GfvFPUaIVEW2QQf7od7c3AOVHX4Kaw7GFdob9U6ubxvS5Dfri08IA==",
   "success": true,
   "projectFilePath": "D:\\Personal Project\\DattingApp\\DattingApp-BackendAPI\\DatingApp\\DatingApp.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Dev002\\.nuget\\packages\\automapper\\9.0.0\\automapper.9.0.0.nupkg.sha512",
     "C:\\Users\\Dev002\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\7.0.0\\automapper.extensions.microsoft.dependencyinjection.7.0.0.nupkg.sha512",
+    "C:\\Users\\Dev002\\.nuget\\packages\\cloudinarydotnet\\1.8.0\\cloudinarydotnet.1.8.0.nupkg.sha512",
     "C:\\Users\\Dev002\\.nuget\\packages\\microsoft.aspnetcore.authentication.jwtbearer\\3.1.21\\microsoft.aspnetcore.authentication.jwtbearer.3.1.21.nupkg.sha512",
     "C:\\Users\\Dev002\\.nuget\\packages\\microsoft.aspnetcore.html.abstractions\\2.2.0\\microsoft.aspnetcore.html.abstractions.2.2.0.nupkg.sha512",
     "C:\\Users\\Dev002\\.nuget\\packages\\microsoft.aspnetcore.razor\\2.2.0\\microsoft.aspnetcore.razor.2.2.0.nupkg.sha512",

@@ -22,7 +22,7 @@ namespace DatingApp.Repository.Implementation
                 User user = new User();
                 try
                 {
-                    user = await _context.User.FirstOrDefaultAsync(x => x.Username == username);
+                    user = await _context.User.Include(p => p.Photos).FirstOrDefaultAsync(x => x.Username == username);
 
                     if (user == null)
                         return null;

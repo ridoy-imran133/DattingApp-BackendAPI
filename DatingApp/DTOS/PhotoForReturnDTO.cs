@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace DatingApp.Models
+namespace DatingApp.DTOS
 {
-    [Table("Photo")]
-    public class Photo
+    public class PhotoForReturnDTO
     {
         public string Id { get; set; }
         public string UserId { get; set; }

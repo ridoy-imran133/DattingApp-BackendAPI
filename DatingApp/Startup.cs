@@ -38,6 +38,9 @@ namespace DatingApp
         {
             services.AddControllers();
             services.AddCors();
+
+            services.Configure<CloudinarySettings>(Configuration.GetSection("CloudinarySettings")); // Get Value From AppSetting and mapping
+
             services.AddMvc()
                     .AddControllersAsServices();
             services.AddAutoMapper(typeof(DattingRepository).Assembly);
@@ -97,7 +100,7 @@ namespace DatingApp
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllers();
+                endpoints.MapDefaultControllerRoute();
             });
         }
     }
