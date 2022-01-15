@@ -22,12 +22,14 @@ namespace DatingApp.Controllers
     public class AuthController : ControllerBase
     {
         private readonly IAuthRepository _IAuthRepository;
+        private readonly IDattingRepository _IDattingRepository;
         private readonly IConfiguration _configuration;
         private readonly IMapper _IMapper;
 
-        public AuthController(IAuthRepository IAuthRepository, IConfiguration configuration, IMapper mapper)
+        public AuthController(IAuthRepository IAuthRepository, IConfiguration configuration, IMapper mapper, IDattingRepository dattingRepository)
         {
             _IAuthRepository = IAuthRepository;
+            _IDattingRepository = dattingRepository;
             _configuration = configuration;
             _IMapper = mapper;
         }
@@ -36,15 +38,31 @@ namespace DatingApp.Controllers
         [Route("register")]
         public async Task<IActionResult> Register(UserForRegisterDTO userForRegister)
         {
-            userForRegister.Username = userForRegister.Username.ToLower();
+            try
+            {
+                userForRegister.Username = userForRegister.Username.ToLower();
 
-            if (await _IAuthRepository.UserExists(userForRegister.Username))
-                return BadRequest("Username Already Exists");
+                if (await _IAuthRepository.UserExists(userForRegister.Username))
+                    return BadRequest("Username Already Exists");
 
-            User user = new User();
-            user.Username = userForRegister.Username;
-            var createdUser = _IAuthRepository.Register(user, userForRegister.Password);
-            return StatusCode(201);
+                var userToCreate = _IMapper.Map<User>(userForRegister);
+
+                //User user = new User();
+                //user.Username = userForRegister.Username;
+                var createdUser = await _IAuthRepository.Register(userToCreate, userForRegister.Password);
+
+                var userToReturn = _IMapper.Map<UserDetailsDTO>(createdUser);
+
+                string currentUserId = userToReturn.Id;
+
+                //var val = CreatedAtRoute("https://localhost:44353/User/user", new { controller = "User", id = createdUser.Id }, userToReturn);
+                var user = await _IDattingRepository.GetUser(currentUserId);
+                return Ok(user);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.StackTrace);
+            }            
         }
 
         [HttpPost]

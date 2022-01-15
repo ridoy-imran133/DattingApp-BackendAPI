@@ -44,9 +44,14 @@ namespace DatingApp.Controllers
         {
             var user = await _IDattingRepository.GetUser(id);
 
-            var userRet = _IMapper.Map<UserDetailsDTO>(user);
+            if (user != null)
+            {
+                var userRet = _IMapper.Map<UserDetailsDTO>(user);
+                return Ok(userRet);
+            }
 
-            return Ok(userRet);
+            return BadRequest();
+            
         }
 
         [HttpPost]
