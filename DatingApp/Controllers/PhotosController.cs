@@ -51,6 +51,14 @@ namespace DatingApp.Controllers
             var photoFromRepo = await _IDattingRepository.GetPhoto(id);
 
             var photo = _IMapper.Map<PhotoForReturnDTO>(photoFromRepo);
+
+            var user = await _IDattingRepository.GetUser(photoFromRepo.UserId);
+
+            if (user != null)
+            {
+                var userRet = _IMapper.Map<UserDetailsDTO>(user);
+                return Ok(userRet);
+            }
             return Ok(photo);
         }
 
@@ -93,12 +101,13 @@ namespace DatingApp.Controllers
                 photos.Add(p);
             }
             
-            bool retValue = _IDattingRepository.SavePhotos(userId, photos);
+            //bool retValue = _IDattingRepository.SavePhotos(userId, photos);
+            bool retValue = _IDattingRepository.SaveSinglePhotos(userId, photo);
             if (retValue)
             {
                 var photoToReturn = _IMapper.Map<PhotoForReturnDTO>(photo);
                 //return CreatedAtRoute("GetPhoto", new { id = photo.Id }, photoToReturn);
-                return CreatedAtAction(nameof(GetPhoto), new { id = photo.Id }, photoToReturn);
+                return CreatedAtAction(nameof(GetPhoto), new { id = retValue }, photoToReturn);
             }
 
             return BadRequest("Photo Will not saved");

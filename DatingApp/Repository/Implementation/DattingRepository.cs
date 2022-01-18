@@ -89,6 +89,15 @@ namespace DatingApp.Repository.Implementation
             }
         }
 
+        public void SaveLogUserActivity(User user)
+        {
+            using (var _context = new DattingAppDbContext())
+            {
+                _context.User.Update(user);
+                _context.SaveChanges();
+            }
+        }
+
         public bool SavePhotos(string userId, IList<Photo> photos)
         {
             using (var _context = new DattingAppDbContext())
@@ -114,6 +123,35 @@ namespace DatingApp.Repository.Implementation
                             _context.SaveChanges();
                             _context.Entry(photo).State = EntityState.Detached;
                         }
+                        _context.SaveChanges();
+                        transaction.Commit();
+                        return true;
+                    }
+                    catch (Exception ex)
+                    {
+                        throw ex;
+                    }
+                }
+            }
+        }
+
+        public bool SaveSinglePhotos(string userId, Photo p)
+        {
+            using (var _context = new DattingAppDbContext())
+            {
+                using (var transaction = _context.Database.BeginTransaction())
+                {
+                    try
+                    {                                       
+                        Photo photo = new Photo();
+                        photo.Id = Guid.NewGuid().ToString();
+                        photo.Url = p.Url;
+                        photo.UserId = userId;
+                        photo.Description = p.Description;
+                        photo.DateAdded = p.DateAdded;
+                        photo.PublicId = p.PublicId;
+                        photo.IsMain = p.IsMain;
+                        _context.Photos.Add(photo);
                         _context.SaveChanges();
                         transaction.Commit();
                         return true;

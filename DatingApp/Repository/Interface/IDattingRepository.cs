@@ -18,8 +18,10 @@ namespace DatingApp.Repository.Interface
         Task<User> GetUser(string pUserId);
         Task<Photo> GetPhoto(string id);
         bool SavePhotos(string userId ,IList<Photo> photos);
+        bool SaveSinglePhotos(string userId, Photo p);
         Task<Photo> GetMainPhotoForUser(string userId);
         bool UpdatePhoto(Photo photo);
         bool DeletePhoto(Photo photo);
+        public void SaveLogUserActivity(User user);
     }
 }

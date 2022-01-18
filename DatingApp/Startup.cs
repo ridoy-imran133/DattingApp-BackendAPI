@@ -59,7 +59,7 @@ namespace DatingApp
                         ValidateAudience = false
                     };
                 });
-
+            services.AddScoped<LogUserActivity>();
             services.AddScoped<IAuthRepository, Authrepository>();
             services.AddScoped<IDattingRepository, DattingRepository>();
         }

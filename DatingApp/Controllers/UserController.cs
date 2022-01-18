@@ -10,9 +10,11 @@ using AutoMapper;
 using DatingApp.DTOS;
 using System.Security.Claims;
 using DatingApp.Models;
+using DatingApp.Helpers;
 
 namespace DatingApp.Controllers
 {
+    [ServiceFilter(typeof(LogUserActivity))]
     [Authorize]
     [Route("[controller]")]
     [ApiController]
