@@ -1,4 +1,5 @@
 ﻿using DatingApp.DTOS;
+using DatingApp.Helpers;
 using DatingApp.Models;
 using System;
 using System.Collections.Generic;
@@ -14,7 +15,10 @@ namespace DatingApp.Repository.Interface
 
         Task<bool> SaveAll();
         public bool SaveEditProfileData(UserForUpdateDTO userForUpdate);
-        Task<IEnumerable<User>> GetUsers();
+        //Task<IEnumerable<User>> GetUsers();
+
+        // For Pagination
+        Task<PagedList<User>> GetUsers(UserParams userParams);
         Task<User> GetUser(string pUserId);
         Task<Photo> GetPhoto(string id);
         bool SavePhotos(string userId ,IList<Photo> photos);

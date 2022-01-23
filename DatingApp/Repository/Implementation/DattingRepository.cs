@@ -1,4 +1,5 @@
 ﻿using DatingApp.DTOS;
+using DatingApp.Helpers;
 using DatingApp.Models;
 using DatingApp.Repository.Interface;
 using Microsoft.EntityFrameworkCore;
@@ -53,14 +54,25 @@ namespace DatingApp.Repository.Implementation
             }
         }
 
-        public async Task<IEnumerable<User>> GetUsers()
+        //public async Task<IEnumerable<User>> GetUsers()
+        //{
+        //    using (var _context = new DattingAppDbContext())
+        //    {
+
+        //        var users = await _context.User.Include(p => p.Photos).ToListAsync();
+
+        //        return users;
+        //    }
+        //}
+
+        public async Task<PagedList<User>> GetUsers(UserParams userParams)
         {
             using (var _context = new DattingAppDbContext())
             {
 
-                var users = await _context.User.Include(p => p.Photos).ToListAsync();
+                var users = _context.User.Include(p => p.Photos);
 
-                return users;
+                return await PagedList<User>.CreateAsync(users, userParams.PageNumber, userParams.PageSize);
             }
         }
 
