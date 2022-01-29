@@ -49,6 +49,8 @@ namespace DatingApp.Controllers
 
                 //User user = new User();
                 //user.Username = userForRegister.Username;
+                if (userToCreate != null)
+                    userToCreate.Age = DateTime.Now.Subtract(Convert.ToDateTime(userToCreate.DateOfBirth)).Days / 365;
                 var createdUser = await _IAuthRepository.Register(userToCreate, userForRegister.Password);
 
                 var userToReturn = _IMapper.Map<UserDetailsDTO>(createdUser);

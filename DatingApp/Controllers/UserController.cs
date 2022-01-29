@@ -33,6 +33,17 @@ namespace DatingApp.Controllers
         [Route("users")]
         public async Task<IActionResult> GetUsers([FromQuery]UserParams userParams)
         {
+            var vCurrentUserId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+            //for sorting
+            var mUserFromRepo = await _IDattingRepository.GetUser(vCurrentUserId);
+            userParams.UserId = vCurrentUserId;
+            if (string.IsNullOrEmpty(userParams.Gender))
+            {
+                userParams.Gender = mUserFromRepo.Gender == "male" ? "female" : "male";
+            }
+
+
             var users = await _IDattingRepository.GetUsers(userParams);
 
             var userReturn = _IMapper.Map<IEnumerable<UserListDTO>>(users);
