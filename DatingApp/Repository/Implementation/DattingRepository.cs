@@ -76,7 +76,20 @@ namespace DatingApp.Repository.Implementation
                 var users = _context.User.Include(p => p.Photos).OrderByDescending(u => u.LastActive).AsQueryable();
                 users = users.Where(u => u.Id != userParams.UserId);
                 users = users.Where(u => u.Gender == userParams.Gender);
-                if(userParams.MinAge !=18 || userParams.MaxAge != 99)
+
+                if (userParams.Likers)
+                {
+                    var userLikers = await GetUserLikes(userParams.UserId, userParams.Likers);
+                    users = users.Where(u => userLikers.Contains(u.Id));
+                }
+
+                if (userParams.Likees)
+                {
+                    var userLikees = await GetUserLikes(userParams.UserId, userParams.Likers);
+                    users = users.Where(u => userLikees.Contains(u.Id));
+                }
+
+                if (userParams.MinAge !=18 || userParams.MaxAge != 99)
                 {
                     var minDOB = DateTime.Today.AddYears(-userParams.MaxAge - 1);
                     var maxDOB = DateTime.Today.AddYears(-userParams.MinAge);
@@ -100,6 +113,27 @@ namespace DatingApp.Repository.Implementation
                 //Pagination
                 return await PagedList<User>.CreateAsync(users, userParams.PageNumber, userParams.PageSize);
             }
+        }
+
+        private async Task<IEnumerable<string>> GetUserLikes(string id, bool likers)
+        {
+            using (var _context = new DattingAppDbContext())
+            {
+                var user = await _context.User
+                        .Include(x => x.Likers)
+                        .Include(x => x.Likees)
+                        .FirstOrDefaultAsync(u => u.Id == id);
+
+                if (likers)
+                {
+                    return user.Likers.Where(u => u.LikeeId == id).Select(i => i.LikerId);
+                }
+                else
+                {
+                    return user.Likees.Where(u => u.LikeeId == id).Select(i => i.LikeeId);
+                }
+            }
+                
         }
 
         public async Task<bool> SaveAll()
@@ -227,6 +261,40 @@ namespace DatingApp.Repository.Implementation
                 _context.Remove(photo);
                 _context.SaveChanges();
                 return true;
+            }
+        }
+
+        public async Task<Like> GetLike(string userId, string recipientId)
+        {
+            using (var _context = new DattingAppDbContext())
+            {
+                var val =  await _context.Likes.FirstOrDefaultAsync(u => u.LikerId == userId &&
+                        u.LikeeId == recipientId);
+                return val;
+            }
+        }
+
+        public bool SaveLike(string userId, string recipientId)
+        {
+            using (var _context = new DattingAppDbContext())
+            {
+                using (var transaction = _context.Database.BeginTransaction())
+                {
+                    try
+                    {
+                        Like li = new Like();
+                        li.LikerId = userId;
+                        li.LikeeId = recipientId;
+                        _context.Likes.Add(li);
+                        _context.SaveChanges();
+                        transaction.Commit();
+                        return true;
+                    }
+                    catch(Exception ex)
+                    {
+                        throw ex;
+                    }
+                }
             }
         }
     }

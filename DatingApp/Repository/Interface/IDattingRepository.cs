@@ -27,5 +27,7 @@ namespace DatingApp.Repository.Interface
         bool UpdatePhoto(Photo photo);
         bool DeletePhoto(Photo photo);
         public void SaveLogUserActivity(User user);
+        Task<Like> GetLike(string userId, string recipientId);
+        bool SaveLike(string userId, string recipientId);
     }
 }

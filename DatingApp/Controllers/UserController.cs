@@ -88,5 +88,27 @@ namespace DatingApp.Controllers
 
             return Ok(val);
         }
+
+        [HttpPost]
+        [Route("{id}/like/{receiptId}")]
+        public async Task<IActionResult> LikeUser(string id, string receiptId)
+        {
+            if (id != User.FindFirst(ClaimTypes.NameIdentifier).Value)
+                return Unauthorized();
+
+            var like = await _IDattingRepository.GetLike(id, receiptId);
+
+            if (like != null)
+                return BadRequest("You already like this user.");
+
+            if (await _IDattingRepository.GetUser(receiptId) == null)
+                return NotFound();
+
+            bool result = _IDattingRepository.SaveLike(id, receiptId);
+
+            if (result)
+                return Ok();
+            return BadRequest("Failed to Like");
+        }
     }
 }
